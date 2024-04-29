@@ -72,7 +72,7 @@ export class News extends Component {
   }
 
   render() {
-    const { articles, page } = this.state;
+    const { articles } = this.state;
 
     return (
       <div className="container my-3">
