@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import NewsItem from "./NewsItem";
 import PropTypes from "prop-types";
+import Spinner from "./Spinner";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const News=(props)=>{
@@ -9,7 +10,6 @@ const News=(props)=>{
   const [loading, setloading] = useState(true)
   const [page, setpage] = useState(1)
   const [totalResult, settotalResult] = useState(0)
-  // document.title = `${capitalizeFirstLetter(props.category)} - DailyNews`;
 
   const capitalizeFirstLetter=(string)=> {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -43,7 +43,6 @@ const News=(props)=>{
   const fetchMoreData=async()=>{
     setpage(page+1)
     let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=b52ae9ac26fd460fb97cd2b3931b21d9&page=${page}&pageSize=${props.pageSize}`;
-    // setloading(true)
     let data = await fetch(url);
     let jsonData = await data.json();
     setarticles(articles.concat(jsonData.articles))
@@ -51,12 +50,14 @@ const News=(props)=>{
   }
     return (
       <div className="container my-3">
-        <h2 className="text-center">DailyNews - Top {capitalizeFirstLetter(props.category)} Headings</h2>
+        <h1 className="text-center" style={{marginTop:'80px'}}>DailyNews - Top {capitalizeFirstLetter(props.category)} Headings</h1>
+        
         <InfiniteScroll
     dataLength={articles.length}
     next={fetchMoreData}
     hasMore={articles.length !== totalResult}
-    loader={<h4 style={{ textAlign: 'center' }}>Loading...</h4>}
+    loader={<Spinner/>}
+    // loader={articles.length==totalResult.length?<Spinner/>:'You have seen all Aricles'}
   >
         <div className="container">
           <div className="row">
